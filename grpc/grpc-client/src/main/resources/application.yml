@@ -1,14 +1,14 @@
 server:
-  port: 8080
+  port: 8000
 spring:
   application:
     name: local-grpc-client
 grpc:
   server:
-    port: 9897
+    port: 8001
   client:
     local-grpc-server:
-      address: 'static://127.0.0.1:9898'
+      address: 'static://127.0.0.1:8002'
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
