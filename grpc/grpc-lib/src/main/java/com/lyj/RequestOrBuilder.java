@@ -4,16 +4,17 @@
 package com.lyj;
 
 public interface RequestOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:Request)
-    com.google.protobuf.MessageOrBuilder {
+		// @@protoc_insertion_point(interface_extends:Request)
+		com.google.protobuf.MessageOrBuilder {
 
-  /**
-   * <code>string request = 1;</code>
-   */
-  java.lang.String getRequest();
-  /**
-   * <code>string request = 1;</code>
-   */
-  com.google.protobuf.ByteString
-      getRequestBytes();
+	/**
+	 * <code>string request = 1;</code>
+	 */
+	java.lang.String getRequest();
+
+	/**
+	 * <code>string request = 1;</code>
+	 */
+	com.google.protobuf.ByteString getRequestBytes();
+
 }

@@ -15,15 +15,17 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class GrpcClientService {
 
-    @GrpcClient("local-grpc-server")
-    private CommonServiceGrpc.CommonServiceBlockingStub simpleStub;
+	@GrpcClient("local-grpc-server")
+	private CommonServiceGrpc.CommonServiceBlockingStub simpleStub;
 
-    public String sendMessage(final String name) {
-        try {
-            final Response response = this.simpleStub.method(Request.newBuilder().setRequest(name).build());
-            return response.getResponse();
-        } catch (final StatusRuntimeException e) {
-            return "FAILED with " + e.getStatus().getCode().name();
-        }
-    }
+	public String sendMessage(final String name) {
+		try {
+			final Response response = this.simpleStub.method(Request.newBuilder().setRequest(name).build());
+			return response.getResponse();
+		}
+		catch (final StatusRuntimeException e) {
+			return "FAILED with " + e.getStatus().getCode().name();
+		}
+	}
+
 }

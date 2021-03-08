@@ -8,7 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class GrpcServeApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(GrpcServeApplication.class, args);
-    }
+
+	public static void main(String[] args) {
+		SpringApplication.run(GrpcServeApplication.class, args);
+	}
+
 }

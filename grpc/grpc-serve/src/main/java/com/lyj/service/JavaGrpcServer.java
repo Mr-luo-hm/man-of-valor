@@ -14,12 +14,12 @@ import net.devh.boot.grpc.server.service.GrpcService;
 @Slf4j
 public class JavaGrpcServer extends CommonServiceGrpc.CommonServiceImplBase {
 
-    @Override
-    public void method(Request req, StreamObserver<Response> responseObserver) {
-        log.info("request;{}", req.getRequest());
-        Response reply = Response.newBuilder().setResponse("Hello ==>").build();
-        responseObserver.onNext(reply);
-        responseObserver.onCompleted();
-    }
+	@Override
+	public void method(Request req, StreamObserver<Response> responseObserver) {
+		log.info("request;{}", req.getRequest());
+		Response reply = Response.newBuilder().setResponse("Hello ==>").build();
+		responseObserver.onNext(reply);
+		responseObserver.onCompleted();
+	}
 
 }
