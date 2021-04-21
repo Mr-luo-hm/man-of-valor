@@ -8,6 +8,9 @@ import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.timeout.IdleStateHandler;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author lyj
+ */
 public class NettyClientFilter extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {

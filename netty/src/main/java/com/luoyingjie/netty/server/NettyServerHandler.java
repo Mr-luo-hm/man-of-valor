@@ -5,6 +5,9 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 
+/**
+ * @author lyj
+ */
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     /** 空闲次数 */
     private int idleCount =1;
