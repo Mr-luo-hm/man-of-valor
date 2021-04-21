@@ -14,7 +14,6 @@ import java.util.List;
 public class PermissionServiceImpl implements PermissionService {
     private final PermissionMapper permissionMapper;
 
-
     public List<String> findByRoleId(List<Integer> roleIds) {
         return permissionMapper.findByRoleId(roleIds);
     }

@@ -13,3 +13,19 @@ mybatis:
   mapper-locations: classpath*:/mapper/**/*Mapper.xml
   configuration:
     map-underscore-to-camel-case: true
+cn:
+  ntshare:
+    laboratory:
+      es:
+        host: scrm-bus-es
+        port: 9100
+        port1: 9101
+        port2: 9102
+        tcp_port: 9400
+        tcp_port1: 9500
+        tcp_port2: 9600
+        index: wscrm_message
+        type: message
+        cluster_name: scrm-es
+        user_name:
+        password:

@@ -2,6 +2,8 @@ package cn.ntshare.laboratory.controller;
 
 import cn.ntshare.laboratory.model.enumerate.ServerResponseEnum;
 import cn.ntshare.laboratory.model.vo.ServerResponseVO;
+import cn.ntshare.laboratory.serivice.EsService;
+import lombok.RequiredArgsConstructor;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -13,14 +15,18 @@ import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("")
+@RequiredArgsConstructor
 public class LoginController {
-
+    private final EsService service;
     @PostMapping("/login")
     public ServerResponseVO login(@RequestParam(value = "account") String account,
-                                  @RequestParam(value = "password") String password) {
+                                  @RequestParam(value = "password") String password) throws IOException {
         Subject userSubject = SecurityUtils.getSubject();
+        Boolean doc_ = service.createIndex("scrm-test", "doc_");
         UsernamePasswordToken token = new UsernamePasswordToken(account, password);
         try {
             // 登录验证
