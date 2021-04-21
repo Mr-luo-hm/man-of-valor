@@ -1,9 +1,9 @@
-package cn.ntshare.laboratory.entity;
+package cn.ntshare.laboratory.model.entity;
 
 import lombok.Data;
 
 @Data
-public class user {
+public class User {
     private static final long serialVersionUID = -6056125703075132981L;
 
     private Integer id;

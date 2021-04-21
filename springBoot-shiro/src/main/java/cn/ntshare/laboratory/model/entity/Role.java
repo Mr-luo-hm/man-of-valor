@@ -1,4 +1,4 @@
-package cn.ntshare.laboratory.entity;
+package cn.ntshare.laboratory.model.entity;
 
 import lombok.Data;
 
