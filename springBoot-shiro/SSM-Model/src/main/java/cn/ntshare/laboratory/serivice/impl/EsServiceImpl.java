@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
-import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -54,7 +53,7 @@ public class EsServiceImpl implements EsService {
     }
 
     public void getFriendRecordByEsScroll(String INDEX) {
-// 1、创建search请求
+        // 1、创建search请求
         SearchRequest searchRequest = new SearchRequest(INDEX);
         // searchRequest.types(EsConstant.TYPE);
         // 2、用SearchSourceBuilder来构造查询请求体 ,请仔细查看它的方法，构造各种查询的方法都在这。
@@ -86,7 +85,7 @@ public class EsServiceImpl implements EsService {
         String scrollId = searchResponse.getScrollId();
         // 处理命中文档
         SearchHit[] searchHits = searchResponse.getHits().getHits();
-        List<Map> mapList = new ArrayList<>();
+        List<Map> mapList = new ArrayList<Map>();
         for (SearchHit hit : searchHits) {
             // 取_source字段值
             mapList.add(hit.getSourceAsMap());
@@ -131,7 +130,6 @@ public class EsServiceImpl implements EsService {
         return result;*/
     }
 
-    @Override
     public void getFriendRecordByEsSearchAfter(String INDEX) throws IOException {
         // 1、创建search请求
         SearchRequest searchRequest = new SearchRequest(INDEX);
@@ -153,7 +151,7 @@ public class EsServiceImpl implements EsService {
         Object[] objects = null;
         SearchResponse searchResponse;
         Map<String, Object> result = new HashMap(8);
-        List<Map> mapList = new ArrayList<>();
+        List<Map> mapList = new ArrayList<Map>();
         while (type) {
             if (objects != null) {
                 sourceBuilder.searchAfter(objects);
