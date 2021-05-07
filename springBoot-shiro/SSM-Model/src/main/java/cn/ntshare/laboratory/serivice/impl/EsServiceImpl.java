@@ -8,24 +8,30 @@ import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.search.*;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.common.Strings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.json.JsonXContent;
 import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.metrics.Cardinality;
+import org.elasticsearch.search.aggregations.metrics.CardinalityAggregationBuilder;
+import org.elasticsearch.search.aggregations.metrics.ExtendedStats;
+import org.elasticsearch.search.aggregations.metrics.ExtendedStatsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -171,5 +177,98 @@ public class EsServiceImpl implements EsService {
             //result.put("list", fomartClientMsg(mapList));
         }
         //return result;
+    }
+
+    public void queryMatch(String indexName, String typeName, String field, String keyWord) throws IOException {
+        SearchRequest request = new SearchRequest();
+        request.types(typeName);
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.matchQuery(field, keyWord));
+        searchSourceBuilder.sort("replyTotal");
+        request.source(searchSourceBuilder);
+        log.info("source:" + request.source());
+        SearchResponse searchResponse = restHighLevelClient.search(request, RequestOptions.DEFAULT);
+        SearchHits hits = searchResponse.getHits();
+        log.info("count:{}", hits.getHits().length);
+        SearchHit[] h = hits.getHits();
+        for (SearchHit hit : h) {
+            System.out.println("结果" + hit.getSourceAsMap() + ",score:" + hit.getScore());
+        }
+    }
+
+    public void sortQuery(String indexName, String typeName, String field, String keyWord, String sort, SortOrder sortOrder) throws IOException {
+        SearchRequest searchRequest = new SearchRequest(indexName);
+        searchRequest.types(typeName);
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.matchQuery(field, keyWord));
+        searchSourceBuilder.sort(sort, sortOrder);
+        searchRequest.source(searchSourceBuilder);
+        log.info("source:" + searchRequest.source());
+        SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        SearchHits hits = searchResponse.getHits();
+        log.info("count:{}", hits.getHits().length);
+        SearchHit[] h = hits.getHits();
+        for (SearchHit hit : h) {
+            System.out.println("结果" + hit.getSourceAsMap() + ",score:" + hit.getScore());
+        }
+    }
+
+    public void multSortQuery(String indexName, String typeName, String field, String keyWord, String sort1, String sort2, SortOrder sortOrder) throws IOException {
+        SearchRequest searchRequest = new SearchRequest(indexName);
+        searchRequest.types(typeName);
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.matchQuery(field, keyWord));
+        searchSourceBuilder.sort(sort1, sortOrder);
+        searchSourceBuilder.sort(sort2, sortOrder);
+        searchRequest.source(searchSourceBuilder);
+        log.info("source:" + searchRequest.source());
+        SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        SearchHits hits = searchResponse.getHits();
+        System.out.println("count:" + hits.getHits().length);
+        SearchHit[] h = hits.getHits();
+        for (SearchHit hit : h) {
+            System.out.println("结果" + hit.getSourceAsMap() + ",score:" + hit.getScore());
+        }
+    }
+
+    public void cardinalityAggregations(String indexName, String typeName, String field) throws IOException {
+        SearchRequest searchRequest = new SearchRequest(indexName);
+        searchRequest.types(typeName);
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        CardinalityAggregationBuilder agg1 = AggregationBuilders.cardinality("agg").field(field);
+        sourceBuilder.aggregation(agg1);
+        searchRequest.source(sourceBuilder);
+        SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        Cardinality agg = searchResponse.getAggregations().get("agg");
+        double value = agg.getValue();
+        log.info(field + " cardinalityAggregation value ：" + value);
+    }
+
+    public void extendedStatsAggregation(String indexName, String typeName, String field) throws IOException {
+        SearchRequest searchRequest = new SearchRequest(indexName);
+        searchRequest.types(typeName);
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        ExtendedStatsAggregationBuilder agg1 = AggregationBuilders.extendedStats("agg").field(field);
+        sourceBuilder.aggregation(agg1);
+        searchRequest.source(sourceBuilder);
+        log.info("source :" + searchRequest.source());
+        SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        ExtendedStats agg = searchResponse.getAggregations().get("agg");
+        double min = agg.getMin();
+        double max = agg.getMax();
+        double avg = agg.getAvg();
+        double sum = agg.getSum();
+        long count = agg.getCount();
+        double stdDeviation = agg.getStdDeviation();
+        double sumOfSquares = agg.getSumOfSquares();
+        double variance = agg.getVariance();
+        System.out.println("min ：" + min);
+        System.out.println("max ：" + max);
+        System.out.println("avg ：" + avg);
+        System.out.println("sum ：" + sum);
+        System.out.println("count ：" + count);
+        System.out.println("stdDeviation ：" + stdDeviation);
+        System.out.println("sumOfSquares ：" + sumOfSquares);
+        System.out.println("variance ：" + variance);
     }
 }

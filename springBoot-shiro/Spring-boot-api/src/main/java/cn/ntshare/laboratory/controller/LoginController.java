@@ -22,6 +22,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class LoginController {
     private final EsService service;
+
     @PostMapping("/login")
     public ServerResponseVO login(@RequestParam(value = "account") String account,
                                   @RequestParam(value = "password") String password) throws IOException {
