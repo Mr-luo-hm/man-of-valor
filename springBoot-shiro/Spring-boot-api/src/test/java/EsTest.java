@@ -1,3 +1,4 @@
+/*
 import cn.ntshare.laboratory.serivice.EsService;
 import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Test;
@@ -33,3 +34,4 @@ public class EsTest {
         esService.cardinalityAggregations("indexName","type","mobile");
     }
 }
+*/

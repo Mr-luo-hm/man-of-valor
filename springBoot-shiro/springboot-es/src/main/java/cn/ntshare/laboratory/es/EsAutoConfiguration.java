@@ -27,6 +27,7 @@ public class EsAutoConfiguration {
                         new HttpHost(properties.getHost(), properties.getPort1(), TYPE),
                         new HttpHost(properties.getHost(), properties.getPort2(), TYPE))
                 .setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
+                    @Override
                     public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {
                         httpClientBuilder.disableAuthCaching();
                         CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
